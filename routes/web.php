@@ -18,4 +18,4 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::resource('articles', [ArticleController::class]);
+Route::resource('articles', ArticleController::class);
