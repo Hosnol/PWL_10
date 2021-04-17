@@ -20,16 +20,17 @@
                     </div>
                     @endif
                     
-                    <form method="post" action="{{ route('mahasiswa.store') }}" id="myForm">
+                    <form method="post" action="{{ route('mahasiswa.store') }}" id="myForm" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="nim">Nim</label>
-                            <br><input type="text" name="nim" class="form-control" id="nim" aria-describedby="nim" >
+                            <input type="text" name="nim" class="form-control" id="nim" aria-describedby="nim" >
                         </div>
                         <div class="form-group">
                             <label for="nama">Nama</label>
-                            <br><input type="nama" name="nama" class="form-control" id="nama" aria-describedby="nama" >
+                            <input type="nama" name="nama" class="form-control" id="nama" aria-describedby="nama" >
                         </div>
+                        
                         <div class="form-group">
                             <label for="kelas">Kelas</label>
                             <select name="kelas" class="form-control">
@@ -38,9 +39,15 @@
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="form-group">
                             <label for="jurusan">Jurusan</label>
-                            <br><input type="jurusan" name="jurusan" class="form-control" id="jurusan" aria-describedby="jurusan" >
+                            <input type="jurusan" name="jurusan" class="form-control" id="jurusan" aria-describedby="jurusan" >
+                        </div>
+
+                        <div class="form-group">
+                            <label for = "foto">Gambar</label>
+                            <input type  = "file" class = "form-control-file" required = "required" name = "foto">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

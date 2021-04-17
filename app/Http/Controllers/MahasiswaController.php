@@ -43,13 +43,17 @@ class MahasiswaController extends Controller
             'nim' => 'required',
             'nama' => 'required',
             'kelas' => 'required',
-            'jurusan' => 'required'
+            'jurusan' => 'required',
+            'foto' => 'required'
         ]);
+
+        $image_name = $request->file('foto')->store('images','public');
 
         $mahasiswa = new Mahasiswa;
         $mahasiswa->nim = $request->get('nim');
         $mahasiswa->nama = $request->get('nama');
         $mahasiswa->jurusan = $request->get('jurusan');
+        $mahasiswa->foto = $image_name;
         $mahasiswa->save();
 
         $kelas = new Kelas;
@@ -101,12 +105,14 @@ class MahasiswaController extends Controller
             'nama' => 'required',
             'kelas' => 'required',
             'jurusan' => 'required',
+            'foto' => 'required'
         ]);
+
 
         $mahasiswa = Mahasiswa::with('kelas')->where('id',$id)->first();
         $mahasiswa->nim = $request->get('nim');
         $mahasiswa->nama = $request->get('nama');
-        $mahasiswa->jurusan = $request->get('jurusan');
+        $mahasiswa->jurusan = $request->get('jurusan'); 
         $mahasiswa->save();
 
         $kelas = new Kelas;
