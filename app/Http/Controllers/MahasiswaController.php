@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Mahasiswa;
 use App\Models\Kelas;
 
@@ -108,11 +109,17 @@ class MahasiswaController extends Controller
             'foto' => 'required'
         ]);
 
-
         $mahasiswa = Mahasiswa::with('kelas')->where('id',$id)->first();
         $mahasiswa->nim = $request->get('nim');
         $mahasiswa->nama = $request->get('nama');
         $mahasiswa->jurusan = $request->get('jurusan'); 
+        
+        if($mahasiswa->foto && file_exists(storage_path('app/public/' . $mahasiswa->foto))){
+            Storage::delete('public/' . $mahasiswa->foto);
+        }
+        $image_name = $request->file('foto')->store('images', 'public');
+        $mahasiswa->foto = $image_name;
+
         $mahasiswa->save();
 
         $kelas = new Kelas;
