@@ -54,8 +54,8 @@
         </tr>
     @endforeach
 </table>
-{{-- <div class="d-flex justify-content-center">
-    {{ $pg->links() }}  
-</div>   --}}
+<div class="d-flex justify-content-center">
+    {{ $mhs->links() }}  
+</div>  
 </div>
 @endsection

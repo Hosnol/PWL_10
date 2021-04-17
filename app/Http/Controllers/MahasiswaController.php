@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Mahasiswa;
 use App\Models\Kelas;
+use PDF;
 
 class MahasiswaController extends Controller
 {
@@ -16,9 +17,8 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        $mahasiswa = Mahasiswa::with('kelas')->get();
-        $paginate = Mahasiswa::paginate(5);
-        return view('mahasiswa.index',['mhs'=>$mahasiswa , 'pg'=>$paginate]);
+        $mahasiswa = Mahasiswa::with('kelas')->paginate(5);
+        return view('mahasiswa.index',['mhs'=>$mahasiswa]);
     }
 
     /**
@@ -149,7 +149,7 @@ class MahasiswaController extends Controller
         //melakukan validasi data
         $cari=$request->cari;
 
-        $Mahasiswa = Mahasiswa::where('nama','like',"%".$cari."%")->get();
+        $Mahasiswa = Mahasiswa::where('nama','like',"%".$cari."%")->paginate(5);
 
         return view('mahasiswa.index',['mhs'=>$Mahasiswa]);
     }
@@ -158,5 +158,11 @@ class MahasiswaController extends Controller
     {   
         $Mahasiswa = Mahasiswa::find($id);
         return view('mahasiswa.khs',['Mahasiswa'=>$Mahasiswa]);
+    }
+
+    public function cetak_pdf($id){
+        $mahasiswa = Mahasiswa::get($id);
+        $pdf = PDF::loadview('mahasiswa.mahasiswa_pdf',['mhs'=>$mahasiswa]);
+        return $pdf->stream();
     }
 }

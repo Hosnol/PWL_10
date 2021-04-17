@@ -26,6 +26,7 @@ Route::get('/article/cetak_pdf', [ArticleController::class, 'cetak_pdf']);
 Route::resource('mahasiswa', MahasiswaController::class);
 Route::get('/nilai/{mahasiswa}', [MahasiswaController::class,'hasil'])->name('mahasiswa.nilai');
 Route::get('/cari',[MahasiswaController::class,'cari'])->name('mahasiswa.cari');
+Route::get('/mahasiswa_pdf/{mahasiswa}', [MahasiswaController::class, 'cetak_pdf'])->name('mahasiswa.cetak');
 // Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
