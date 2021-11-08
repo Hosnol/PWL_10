@@ -37,11 +37,11 @@
     @foreach ($mhs as $Mahasiswa)
         <tr>
             <td>{{$Mahasiswa->nim}}</td>
-            <td>{{$Mahasiswa->nama}}</td> 
-            <td><img width="100px" height="100px" src="{{asset('storage/'.$Mahasiswa->foto)}}"></td>
+            <td>{{$Mahasiswa->nama}}</td>
+            <td><img width="100px" height="100px" src="{{$Mahasiswa->foto}}"></td>
             <td>{{$Mahasiswa->kelas->nama_kelas}}</td>
             <td>{{$Mahasiswa->jurusan}}</td>
-            <td> 
+            <td>
                 <form action="{{route('mahasiswa.destroy',$Mahasiswa->id)}}" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus data?')">
                     <a class="btn btn-info" href="{{route('mahasiswa.show',$Mahasiswa->id)}}">Show</a>
                     <a class="btn btn-primary" href="{{route('mahasiswa.edit',$Mahasiswa->id)}}">Edit</a>
@@ -55,7 +55,7 @@
     @endforeach
 </table>
 <div class="d-flex justify-content-center">
-    {{ $mhs->links() }}  
-</div>  
+    {{ $mhs->links() }}
+</div>
 </div>
 @endsection

@@ -6,10 +6,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Mahasiswa;
 use App\Models\Kelas;
+use App\Models\Oracle;
 use PDF;
 
 class MahasiswaController extends Controller
 {
+    public function oracle()
+    {
+        $data = new Oracle;
+        return $data;
+    }
+
+    public function uploadFile(Request $request,$oke)
+    {
+            $result ='';
+            $file = $request->file($oke);
+            $name = $file->getClientOriginalName();
+
+            $extension = explode('.',$name);
+            $extension = strtolower(end($extension));
+
+            $key = rand().'-'.$oke;
+            $tmp_file_name = "{$key}.{$extension}";
+            $tmp_file_path = "admin/images/mahasiswa/";
+            $file->move($tmp_file_path,$tmp_file_name);
+
+            $result = 'admin/images/mahasiswa'.'/'.$tmp_file_name;
+        return $result;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -48,13 +72,15 @@ class MahasiswaController extends Controller
             'foto' => 'required'
         ]);
 
-        $image_name = $request->file('foto')->store('images','public');
+        $foto_mhs = $this->uploadFile($request,'foto');
+        $image_name = $foto_mhs;
+        $upload = $this->oracle()->upFileOracle($image_name);
 
         $mahasiswa = new Mahasiswa;
         $mahasiswa->nim = $request->get('nim');
         $mahasiswa->nama = $request->get('nama');
         $mahasiswa->jurusan = $request->get('jurusan');
-        $mahasiswa->foto = $image_name;
+        $mahasiswa->foto = $upload['message'];
         $mahasiswa->save();
 
         $kelas = new Kelas;
@@ -112,8 +138,8 @@ class MahasiswaController extends Controller
         $mahasiswa = Mahasiswa::with('kelas')->where('id',$id)->first();
         $mahasiswa->nim = $request->get('nim');
         $mahasiswa->nama = $request->get('nama');
-        $mahasiswa->jurusan = $request->get('jurusan'); 
-        
+        $mahasiswa->jurusan = $request->get('jurusan');
+
         if($mahasiswa->foto && file_exists(storage_path('app/public/' . $mahasiswa->foto))){
             Storage::delete('public/' . $mahasiswa->foto);
         }
@@ -155,13 +181,13 @@ class MahasiswaController extends Controller
     }
 
     public function hasil($id)
-    {   
+    {
         $Mahasiswa = Mahasiswa::find($id);
         return view('mahasiswa.khs',['Mahasiswa'=>$Mahasiswa]);
     }
 
     public function cetak_pdf($id){
-        $mahasiswa = Mahasiswa::get($id);
+        $mahasiswa = Mahasiswa::find($id);
         $pdf = PDF::loadview('mahasiswa.mahasiswa_pdf',['mhs'=>$mahasiswa]);
         return $pdf->stream();
     }
